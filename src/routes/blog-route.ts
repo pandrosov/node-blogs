@@ -11,22 +11,24 @@ import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {blogPostValidation} from "../validators/blog-validator";
 import {inputModelValidation} from "../middlewares/inputModel/input-model-validation";
 import {BlogDto} from "../types/blog/input";
+import {BlogType} from "../types/blog/output";
 
 export const blogRoute = Router({})
 
 blogRoute.get('/', (req: Request, res: Response) => {
     const blogs = BlogRepository.getAllBlogs()
-
-    res.send(blogs)
+    res.sendStatus(HttpCodes.SUCCESS).send(blogs)
 })
 
 blogRoute.get('/:id', authMiddleware, (req: RequestWithParams<Params>, res: Response) => {
     const id = req.params.id
     const blog = BlogRepository.getBlogById(id)
-    if (!blog)
+    if (!blog) {
         res.sendStatus(HttpCodes.NOT_FOUND)
+        return
+    }
 
-    res.send(blog)
+    res.sendStatus(HttpCodes.SUCCESS).send(blog)
 })
 
 blogRoute.post('/', authMiddleware, blogPostValidation(), inputModelValidation, (req: RequestWithBody<BlogDto>, res: Response) => {
@@ -36,8 +38,8 @@ blogRoute.post('/', authMiddleware, blogPostValidation(), inputModelValidation, 
         description,
         websiteUrl
     }
-    BlogRepository.createBlog(newBlog)
-    res.status(201).send()
+    const createdBlog : BlogType = BlogRepository.createBlog(newBlog)
+    res.status(HttpCodes.CREATED).send(createdBlog)
 })
 
 blogRoute.put('/:id', authMiddleware, blogPostValidation(), inputModelValidation, (req: RequestWithBodyAndParams<Params, BlogDto>, res: Response) => {
@@ -58,7 +60,7 @@ blogRoute.put('/:id', authMiddleware, blogPostValidation(), inputModelValidation
     res.sendStatus(204)
 })
 
-blogRoute.delete('/:id', (req: RequestWithParams<Params>, res: Response) => {
+blogRoute.delete('/:id', authMiddleware, (req: RequestWithParams<Params>, res: Response) => {
     const blogId = req.params.id
     const blogIndex = BlogRepository.searchBlogIndex(blogId)
     if(blogIndex === -1) {

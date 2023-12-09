@@ -1,8 +1,9 @@
 import {BlogType} from "../types/blog/output";
+import {PostType} from "../types/post/output";
 
 type DBtype = {
     blogs: BlogType[],
-    posts: []
+    posts: PostType[]
 }
 
 export const db = {
@@ -15,6 +16,13 @@ export const db = {
         }
     ],
     posts: [
-
+        {
+            "id": "string",
+            "title": "string",
+            "shortDescription": "string",
+            "content": "string",
+            "blogId": "string",
+            "blogName": "string"
+        }
     ]
 }

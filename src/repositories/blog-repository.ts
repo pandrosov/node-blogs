@@ -43,5 +43,6 @@ export class BlogRepository {
         const newBlog = {id: blogId, ...createObj}
 
         db.blogs.push(newBlog)
+        return newBlog
     }
 }

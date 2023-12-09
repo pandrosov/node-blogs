@@ -8,4 +8,4 @@ app.use(express.json())
 
 app.use("/blogs", blogRoute);
 app.use("/posts", postRoute);
-app.use("testing", testingRoute)
+app.use("/testing", testingRoute)
