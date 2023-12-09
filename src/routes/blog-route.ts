@@ -15,7 +15,7 @@ import {BlogType} from "../types/blog/output";
 
 export const blogRoute = Router({})
 
-blogRoute.get('/', (req: Request, res: Response) => {
+blogRoute.get('/', authMiddleware, (req: Request, res: Response) => {
     const blogs = BlogRepository.getAllBlogs()
     res.sendStatus(HttpCodes.SUCCESS).send(blogs)
 })

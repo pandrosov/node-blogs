@@ -8,7 +8,7 @@ const auth_middleware_1 = require("../middlewares/auth/auth-middleware");
 const blog_validator_1 = require("../validators/blog-validator");
 const input_model_validation_1 = require("../middlewares/inputModel/input-model-validation");
 exports.blogRoute = (0, express_1.Router)({});
-exports.blogRoute.get('/', (req, res) => {
+exports.blogRoute.get('/', auth_middleware_1.authMiddleware, (req, res) => {
     const blogs = blog_repository_1.BlogRepository.getAllBlogs();
     res.sendStatus(common_1.HttpCodes.SUCCESS).send(blogs);
 });
