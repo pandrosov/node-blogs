@@ -12,19 +12,16 @@ import {postValidation} from "../validators/post-validator";
 import {inputModelValidation} from "../middlewares/inputModel/input-model-validation";
 import {PostRepository} from "../repositories/post-repository";
 import {PostDto} from "../types/post/input";
-import {BlogDto} from "../types/blog/input";
-import {BlogType} from "../types/blog/output";
-import {BlogRepository} from "../repositories/blog-repository";
 import {PostType} from "../types/post/output";
 
 export const postRoute = Router({})
 
-postRoute.get('/', authMiddleware, (req: Request, res: Response) => {
+postRoute.get('/', (req: Request, res: Response) => {
     const posts = PostRepository.getAllPosts()
     res.sendStatus(HttpCodes.SUCCESS).send(posts)
 })
 
-postRoute.get('/:id', authMiddleware, (req: RequestWithParams<Params>, res: Response) => {
+postRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
     const id = req.params.id
     const post = PostRepository.getPostById(id)
     if(!post) {

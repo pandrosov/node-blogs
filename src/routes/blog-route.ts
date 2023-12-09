@@ -15,12 +15,12 @@ import {BlogType} from "../types/blog/output";
 
 export const blogRoute = Router({})
 
-blogRoute.get('/', authMiddleware, (req: Request, res: Response) => {
+blogRoute.get('/', (req: Request, res: Response) => {
     const blogs = BlogRepository.getAllBlogs()
     res.sendStatus(HttpCodes.SUCCESS).send(blogs)
 })
 
-blogRoute.get('/:id', authMiddleware, (req: RequestWithParams<Params>, res: Response) => {
+blogRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
     const id = req.params.id
     const blog = BlogRepository.getBlogById(id)
     if (!blog) {
