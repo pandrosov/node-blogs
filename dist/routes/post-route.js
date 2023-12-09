@@ -8,18 +8,18 @@ const post_validator_1 = require("../validators/post-validator");
 const input_model_validation_1 = require("../middlewares/inputModel/input-model-validation");
 const post_repository_1 = require("../repositories/post-repository");
 exports.postRoute = (0, express_1.Router)({});
-exports.postRoute.get('/', auth_middleware_1.authMiddleware, (req, res) => {
+exports.postRoute.get('/', (req, res) => {
     const posts = post_repository_1.PostRepository.getAllPosts();
-    res.sendStatus(common_1.HttpCodes.SUCCESS).send(posts);
+    res.send(posts);
 });
-exports.postRoute.get('/:id', auth_middleware_1.authMiddleware, (req, res) => {
+exports.postRoute.get('/:id', (req, res) => {
     const id = req.params.id;
     const post = post_repository_1.PostRepository.getPostById(id);
     if (!post) {
         res.sendStatus(common_1.HttpCodes.NOT_FOUND);
         return;
     }
-    res.sendStatus(common_1.HttpCodes.SUCCESS).send(post);
+    res.send(post);
 });
 exports.postRoute.post('/', auth_middleware_1.authMiddleware, (0, post_validator_1.postValidation)(), input_model_validation_1.inputModelValidation, (req, res) => {
     const { title, shortDescription, content, blogName, blogId } = req.body;

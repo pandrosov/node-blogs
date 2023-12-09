@@ -18,7 +18,7 @@ export const postRoute = Router({})
 
 postRoute.get('/', (req: Request, res: Response) => {
     const posts = PostRepository.getAllPosts()
-    res.sendStatus(HttpCodes.SUCCESS).send(posts)
+    res.send(posts)
 })
 
 postRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
@@ -29,7 +29,7 @@ postRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
         return
     }
 
-    res.sendStatus(HttpCodes.SUCCESS).send(post)
+    res.send(post)
 })
 
 postRoute.post('/', authMiddleware, postValidation(), inputModelValidation, (req: RequestWithBody<PostDto>, res: Response) => {

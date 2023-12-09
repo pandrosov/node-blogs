@@ -17,7 +17,7 @@ export const blogRoute = Router({})
 
 blogRoute.get('/', (req: Request, res: Response) => {
     const blogs = BlogRepository.getAllBlogs()
-    res.sendStatus(HttpCodes.SUCCESS).send(blogs)
+    res.send(blogs)
 })
 
 blogRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
@@ -28,7 +28,7 @@ blogRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
         return
     }
 
-    res.sendStatus(HttpCodes.SUCCESS).send(blog)
+    res.send(blog)
 })
 
 blogRoute.post('/', authMiddleware, blogPostValidation(), inputModelValidation, (req: RequestWithBody<BlogDto>, res: Response) => {

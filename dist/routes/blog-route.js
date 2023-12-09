@@ -8,18 +8,18 @@ const auth_middleware_1 = require("../middlewares/auth/auth-middleware");
 const blog_validator_1 = require("../validators/blog-validator");
 const input_model_validation_1 = require("../middlewares/inputModel/input-model-validation");
 exports.blogRoute = (0, express_1.Router)({});
-exports.blogRoute.get('/', auth_middleware_1.authMiddleware, (req, res) => {
+exports.blogRoute.get('/', (req, res) => {
     const blogs = blog_repository_1.BlogRepository.getAllBlogs();
-    res.sendStatus(common_1.HttpCodes.SUCCESS).send(blogs);
+    res.send(blogs);
 });
-exports.blogRoute.get('/:id', auth_middleware_1.authMiddleware, (req, res) => {
+exports.blogRoute.get('/:id', (req, res) => {
     const id = req.params.id;
     const blog = blog_repository_1.BlogRepository.getBlogById(id);
     if (!blog) {
         res.sendStatus(common_1.HttpCodes.NOT_FOUND);
         return;
     }
-    res.sendStatus(common_1.HttpCodes.SUCCESS).send(blog);
+    res.send(blog);
 });
 exports.blogRoute.post('/', auth_middleware_1.authMiddleware, (0, blog_validator_1.blogPostValidation)(), input_model_validation_1.inputModelValidation, (req, res) => {
     const { name, description, websiteUrl } = req.body;
