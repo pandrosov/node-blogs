@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {Result, ValidationError, validationResult} from "express-validator";
-import {HttpCodes} from "../../types/common";
+import {ErrorMessageType, ErrorType, HttpCodes} from "../../types/common";
 
 export const inputModelValidation = (req: Request, res: Response, next: NextFunction) => {
     const errors: Result = validationResult(req).formatWith((error: ValidationError) => {
@@ -20,10 +20,11 @@ export const inputModelValidation = (req: Request, res: Response, next: NextFunc
 
     if (!errors.isEmpty()) {
         const err = errors.array({onlyFirstError: true})
+        let errorsMessage : ErrorType = {
+            errorsMessages: err
+        }
 
-        return res.status(HttpCodes.BAD_REQUEST).send({
-            errorMessages: err
-        })
+        return res.status(HttpCodes.BAD_REQUEST).send(errorsMessage)
     }
 
     return next()
