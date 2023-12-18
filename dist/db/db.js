@@ -4,7 +4,7 @@ exports.db = void 0;
 exports.db = {
     blogs: [
         {
-            "id": "string",
+            "id": "string1234",
             "name": "string",
             "description": "string",
             "websiteUrl": "string"

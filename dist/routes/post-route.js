@@ -22,7 +22,7 @@ exports.postRoute.get('/:id', (req, res) => {
     res.send(post);
 });
 exports.postRoute.post('/', auth_middleware_1.authMiddleware, (0, post_validator_1.postValidation)(), input_model_validation_1.inputModelValidation, (req, res) => {
-    const { title, shortDescription, content, blogName, blogId } = req.body;
+    const { title, shortDescription, content, blogName = "", blogId } = req.body;
     const newPost = {
         title,
         shortDescription,
@@ -56,6 +56,7 @@ exports.postRoute.delete('/:id', auth_middleware_1.authMiddleware, (req, res) =>
     const postIndex = post_repository_1.PostRepository.searchPostIndex(id);
     if (postIndex === -1) {
         res.sendStatus(common_1.HttpCodes.NOT_FOUND);
+        return;
     }
     post_repository_1.PostRepository.deletePost(postIndex);
     res.sendStatus(common_1.HttpCodes.NO_CONTENT);

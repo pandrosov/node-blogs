@@ -8,7 +8,7 @@ class PostRepository {
         return db_1.db.posts;
     }
     static searchPostIndex(id) {
-        return db_1.db.posts.findIndex(post => post.id !== id);
+        return db_1.db.posts.findIndex(post => post.id === id);
     }
     static updatePostByIndex(postIndex, postData) {
         const post = db_1.db.posts[postIndex];

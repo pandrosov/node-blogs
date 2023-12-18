@@ -9,7 +9,7 @@ export class PostRepository {
     }
 
     static searchPostIndex(id: string) {
-        return db.posts.findIndex(post => post.id !== id)
+        return db.posts.findIndex(post => post.id === id)
     }
 
     static updatePostByIndex(postIndex: number, postData: PostDto) {

@@ -9,7 +9,7 @@ type DBtype = {
 export const db = {
     blogs: [
         {
-            "id": "string",
+            "id": "string1234",
             "name": "string",
             "description": "string",
             "websiteUrl": "string"

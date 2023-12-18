@@ -9,7 +9,7 @@ export class BlogRepository {
     }
 
     static searchBlogIndex(id: string) {
-        return db.blogs.findIndex(blog => blog.id !== id)
+        return db.blogs.findIndex(blog => blog.id === id)
     }
 
     static updateBlogByIndex(blogIndex: number, blogData: BlogDto) {
@@ -21,7 +21,9 @@ export class BlogRepository {
             websiteUrl: blogData.websiteUrl
         }
 
-        return db.blogs.splice(blogIndex, 1, updatedBlog)
+        console.log(updatedBlog, blogIndex)
+
+        db.blogs.splice(blogIndex, 1, updatedBlog)
     }
 
     static deleteBlog(blogIndex: number) {

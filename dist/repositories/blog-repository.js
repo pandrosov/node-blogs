@@ -8,12 +8,13 @@ class BlogRepository {
         return db_1.db.blogs;
     }
     static searchBlogIndex(id) {
-        return db_1.db.blogs.findIndex(blog => blog.id !== id);
+        return db_1.db.blogs.findIndex(blog => blog.id === id);
     }
     static updateBlogByIndex(blogIndex, blogData) {
         const blog = db_1.db.blogs[blogIndex];
         const updatedBlog = Object.assign(Object.assign({}, blog), { name: blogData.name, description: blogData.description, websiteUrl: blogData.websiteUrl });
-        return db_1.db.blogs.splice(blogIndex, 1, updatedBlog);
+        console.log(updatedBlog, blogIndex);
+        db_1.db.blogs.splice(blogIndex, 1, updatedBlog);
     }
     static deleteBlog(blogIndex) {
         return db_1.db.blogs.splice(blogIndex, 1);

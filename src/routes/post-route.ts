@@ -33,7 +33,7 @@ postRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
 })
 
 postRoute.post('/', authMiddleware, postValidation(), inputModelValidation, (req: RequestWithBody<PostDto>, res: Response) => {
-    const {title, shortDescription, content, blogName, blogId} = req.body;
+    const {title, shortDescription, content, blogName = "", blogId} = req.body;
     const newPost: PostDto = {
         title,
         shortDescription,
@@ -68,6 +68,7 @@ postRoute.delete('/:id', authMiddleware, (req: RequestWithParams<Params>, res: R
     const postIndex = PostRepository.searchPostIndex(id)
     if(postIndex === -1) {
         res.sendStatus(HttpCodes.NOT_FOUND)
+        return
     }
     PostRepository.deletePost(postIndex)
     res.sendStatus(HttpCodes.NO_CONTENT)
