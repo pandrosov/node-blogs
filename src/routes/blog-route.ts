@@ -17,7 +17,7 @@ export const blogRoute = Router({})
 blogRoute.get('/', async (req: Request, res: Response) => {
     try {
         const blogs = await BlogRepository.getAllBlogs()
-        res.send(blogs)
+        res.status(HTTP_RESPONSE_CODE.SUCCESS).send(blogs)
     } catch (error) {
         res.sendStatus(HTTP_RESPONSE_CODE.BAD_REQUEST)
     }
@@ -49,7 +49,6 @@ blogRoute.post('/', authMiddleware, blogPostValidation(), inputModelValidation, 
         const createdBlogId : string = await BlogRepository.createBlog(newBlog)
         if(!createdBlogId)
             res.sendStatus(HTTP_RESPONSE_CODE.BAD_REQUEST)
-
 
         const blog = await BlogRepository.getBlogById(createdBlogId)
         res.status(HTTP_RESPONSE_CODE.CREATED).send(blog)
@@ -86,5 +85,5 @@ blogRoute.delete('/:id', authMiddleware, async (req: RequestWithParams<Params>, 
         return
     }
 
-    res.sendStatus(HTTP_RESPONSE_CODE.BAD_REQUEST)
+    res.sendStatus(HTTP_RESPONSE_CODE.NOT_FOUND)
 })
