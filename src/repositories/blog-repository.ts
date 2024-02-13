@@ -55,7 +55,7 @@ export class BlogRepository {
     }
 
     static async deletedBlog(id: string): Promise<boolean> {
-        const response = await blogCollection.deleteOne({_ud: new ObjectId(id)})
+        const response = await blogCollection.deleteOne({_id: new ObjectId(id)})
 
         return !!response?.deletedCount
     }
