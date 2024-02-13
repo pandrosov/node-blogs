@@ -47,14 +47,14 @@ blogRoute.post('/', authMiddleware, blogPostValidation(), inputModelValidation, 
             websiteUrl
         }
         const createdBlogId : string = await BlogRepository.createBlog(newBlog)
-        if(createdBlogId) {
-            const blog = await BlogRepository.getBlogById(createdBlogId)
-            res.status(HTTP_RESPONSE_CODE.CREATED).send(blog)
-        }
+        if(!createdBlogId)
+            res.sendStatus(HTTP_RESPONSE_CODE.BAD_REQUEST)
 
-        res.sendStatus(HTTP_RESPONSE_CODE.BAD_REQUEST)
+
+        const blog = await BlogRepository.getBlogById(createdBlogId)
+        res.status(HTTP_RESPONSE_CODE.CREATED).send(blog)
     } catch (error) {
-        res.sendStatus(HTTP_RESPONSE_CODE.BAD_REQUEST)
+        res.sendStatus(HTTP_RESPONSE_CODE.BAD_REQUEST).send(error)
     }
 })
 
