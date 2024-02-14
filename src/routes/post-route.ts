@@ -86,10 +86,12 @@ postRoute.delete('/:id', authMiddleware, async (req: RequestWithParams<Params>, 
         const isDeleted = await PostRepository.deletePost(postId)
 
         if(isDeleted) {
-            res.sendStatus(HTTP_RESPONSE_CODE.NOT_FOUND)
+            res.sendStatus(HTTP_RESPONSE_CODE.NO_CONTENT)
+            return
         }
 
+        res.sendStatus(HTTP_RESPONSE_CODE.NOT_FOUND)
     } catch (error) {
-        res.status(HTTP_RESPONSE_CODE.BAD_REQUEST).send(error)
+        res.status(HTTP_RESPONSE_CODE.BAD_REQUEST)
     }
 })
