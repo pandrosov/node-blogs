@@ -17,9 +17,9 @@ import {BlogRepository} from "../repositories/blog-repository";
 
 export const postRoute = Router({})
 
-postRoute.get('/', (req: Request, res: Response) => {
+postRoute.get('/', async (req: Request, res: Response) => {
     try {
-        const posts = PostRepository.getAllPosts()
+        const posts = await PostRepository.getAllPosts()
         res.status(HTTP_RESPONSE_CODE.SUCCESS).send(posts)
     } catch (error) {
         res.status(HTTP_RESPONSE_CODE.BAD_REQUEST).send(error)
