@@ -20,7 +20,7 @@ export const postRoute = Router({})
 postRoute.get('/', (req: Request, res: Response) => {
     try {
         const posts = PostRepository.getAllPosts()
-        res.send(posts)
+        res.status(HTTP_RESPONSE_CODE.SUCCESS).send(posts)
     } catch (error) {
         res.status(HTTP_RESPONSE_CODE.BAD_REQUEST).send(error)
     }
