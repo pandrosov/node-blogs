@@ -7,3 +7,7 @@ export type PostType = {
     blogName: string,
     createdAt: string
 }
+
+export type OutputPostType = {
+
+}

@@ -7,7 +7,7 @@ export const blogMapper = (blog: WithId<BlogType>): OutputBlogType => {
         name: blog.name,
         description: blog.description,
         websiteUrl: blog.websiteUrl,
-        createdAt: new Date().toISOString(),
-        isMembership: true
+        createdAt: blog.createdAt,
+        isMembership: blog.isMembership
     }
 }

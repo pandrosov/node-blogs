@@ -2,7 +2,7 @@ import {PostType} from "../types/post/output";
 import {PostDto} from "../types/post/input";
 
 export class PostRepository {
-    static getAllPosts() {
+    static async getAllPosts() {
 
     }
 
