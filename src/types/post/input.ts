@@ -6,3 +6,10 @@ export type PostDto = {
     blogName: string,
     createdAt: string
 }
+
+export type PostReqData = {
+    title: string,
+    shortDescription: string,
+    content: string,
+    blogId: string
+}

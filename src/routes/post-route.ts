@@ -11,65 +11,85 @@ import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {postValidation} from "../validators/post-validator";
 import {inputModelValidation} from "../middlewares/inputModel/input-model-validation";
 import {PostRepository} from "../repositories/post-repository";
-import {PostDto} from "../types/post/input";
-import {PostType} from "../types/post/output";
+import {PostDto, PostReqData} from "../types/post/input";
+import {OutputPostType, PostType} from "../types/post/output";
+import {BlogRepository} from "../repositories/blog-repository";
 
 export const postRoute = Router({})
 
 postRoute.get('/', (req: Request, res: Response) => {
-    const posts = PostRepository.getAllPosts()
-    res.send(posts)
+    try {
+        const posts = PostRepository.getAllPosts()
+        res.send(posts)
+    } catch (error) {
+        res.status(HTTP_RESPONSE_CODE.BAD_REQUEST).send(error)
+    }
 })
 
-postRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
-    // const id = req.params.id
-    // const post = PostRepository.getPostById(id)
-    // if(!post) {
-    //     res.sendStatus(HTTP_RESPONSE_CODE.NOT_FOUND)
-    //     return
-    // }
-
-    res.sendStatus(200)
+postRoute.get('/:id', async (req: RequestWithParams<Params>, res: Response) => {
+    try {
+        const id = req.params.id
+        const post = await PostRepository.getPostById(id)
+        if(!post) {
+            res.sendStatus(HTTP_RESPONSE_CODE.NOT_FOUND)
+            return
+        }
+        res.send(post)
+    } catch (error) {
+        res.status(HTTP_RESPONSE_CODE.BAD_REQUEST).send(error)
+    }
 })
 
-postRoute.post('/', authMiddleware, postValidation(), inputModelValidation, (req: RequestWithBody<PostDto>, res: Response) => {
+postRoute.post('/', authMiddleware, postValidation(), inputModelValidation, async (req: RequestWithBody<PostDto>, res: Response) => {
     const {title, shortDescription, content, blogName = "", blogId} = req.body;
-    // const newPost: PostDto = {
-    //     title,
-    //     shortDescription,
-    //     content,
-    //     blogName,
-    //     blogId
-    // }
-    // const createdPost:PostType = PostRepository.createPost(newPost)
-    res.status(HTTP_RESPONSE_CODE.CREATED).send({result: true})
+    const newPost: PostReqData = {
+        title,
+        shortDescription,
+        content,
+        blogId
+    }
+
+    const createdPostId:string = await PostRepository.createPost(newPost)
+    if(!createdPostId) {
+        res.sendStatus(HTTP_RESPONSE_CODE.BAD_REQUEST)
+        return
+    }
+
+    const post = await PostRepository.getPostById(createdPostId)
+    res.status(HTTP_RESPONSE_CODE.CREATED).send(post)
 })
 
-postRoute.put('/:id', authMiddleware, postValidation(), inputModelValidation, (req: RequestWithBodyAndParams<Params, PostDto>, res: Response) => {
-    const postId = req.params.id
-    // const postIndex = PostRepository.searchPostIndex(postId)
-    // if(postIndex === -1) {
-    //     res.sendStatus(HTTP_RESPONSE_CODE.NOT_FOUND)
-    //     return
-    // }
-    // let {title, shortDescription, content, blogName, blogId} = req.body
-    // let updatedPost = {
-    //     title,
-    //     shortDescription,
-    //     content,
-    //     blogName,
-    //     blogId
-    // }
-    // PostRepository.updatePostByIndex(postIndex, updatedPost)
-    res.sendStatus(204)
+postRoute.put('/:id', authMiddleware, postValidation(), inputModelValidation, async (req: RequestWithBodyAndParams<Params, PostDto>, res: Response) => {
+    try {
+        const postId = req.params.id
+        let {title, shortDescription, content, blogId} = req.body
+        let updatedBlog = {
+            title,
+            shortDescription,
+            content,
+            blogId
+        }
+        const isUpdated = await PostRepository.updatePostById(postId, updatedBlog)
+        if(isUpdated) {
+            res.sendStatus(HTTP_RESPONSE_CODE.NO_CONTENT)
+            return
+        }
+
+        res.sendStatus(HTTP_RESPONSE_CODE.NOT_FOUND)
+    } catch (error) {
+        res.sendStatus(HTTP_RESPONSE_CODE.BAD_REQUEST)
+    }
 })
-postRoute.delete('/:id', authMiddleware, (req: RequestWithParams<Params>, res: Response) => {
-    // const id = req.params.id
-    // const postIndex = PostRepository.searchPostIndex(id)
-    // if(postIndex === -1) {
-    //     res.sendStatus(HTTP_RESPONSE_CODE.NOT_FOUND)
-    //     return
-    // }
-    // PostRepository.deletePost(postIndex)
-    res.sendStatus(HTTP_RESPONSE_CODE.NO_CONTENT)
+postRoute.delete('/:id', authMiddleware, async (req: RequestWithParams<Params>, res: Response) => {
+    try {
+        const postId = req.params.id
+        const isDeleted = await PostRepository.deletePost(postId)
+
+        if(isDeleted) {
+            res.sendStatus(HTTP_RESPONSE_CODE.NOT_FOUND)
+        }
+
+    } catch (error) {
+        res.status(HTTP_RESPONSE_CODE.BAD_REQUEST).send(error)
+    }
 })

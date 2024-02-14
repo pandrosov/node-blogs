@@ -43,20 +43,25 @@ export class BlogRepository {
         try {
             const updatedBlogResponse = await blogCollection.updateOne({_id: new ObjectId(id)}, {
                 $set: {
-                    ...updateData
+                    name: updateData.name,
+                    description: updateData.description,
+                    websiteUrl: updateData.websiteUrl
                 }
             })
 
-            return !!updatedBlogResponse?.modifiedCount
+            return !!updatedBlogResponse.matchedCount
         } catch {
             return false
         }
-
     }
 
     static async deletedBlog(id: string): Promise<boolean> {
-        const response = await blogCollection.deleteOne({_id: new ObjectId(id)})
+        try {
+            const response = await blogCollection.deleteOne({_id: new ObjectId(id)})
 
-        return !!response?.deletedCount
+            return !!response?.deletedCount
+        } catch {
+            return false
+        }
     }
 }

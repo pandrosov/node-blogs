@@ -67,10 +67,12 @@ blogRoute.put('/:id', authMiddleware, blogPostValidation(), inputModelValidation
             websiteUrl
         }
         const isUpdated = await BlogRepository.updateBlogById(blogId, updatedBlog)
-        if(isUpdated)
+        if(isUpdated) {
             res.sendStatus(HTTP_RESPONSE_CODE.NO_CONTENT)
+            return
+        }
 
-        res.sendStatus(HTTP_RESPONSE_CODE.BAD_REQUEST)
+        res.sendStatus(HTTP_RESPONSE_CODE.NOT_FOUND)
     } catch (error) {
         res.sendStatus(HTTP_RESPONSE_CODE.BAD_REQUEST)
     }
